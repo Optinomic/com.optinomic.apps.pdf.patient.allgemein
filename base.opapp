@@ -22,7 +22,7 @@ website = http://www.optinomic.com/
 __opapp_include(readme.md)
 
 [template PDF 6 35]
-__opapp_include(../lib/polymer/index.m4)
+__opapp_include(lib/polymer/index.m4)
 __opapp_include(elements/view.html)
 
 
