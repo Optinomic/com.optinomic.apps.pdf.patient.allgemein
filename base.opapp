@@ -22,7 +22,7 @@ phone = +41 (0)44 508 26 76
 website = http://www.optinomic.com/
 
 
-[template pdf]
+[template PDF]
 __opapp_include(optinomic_lib/dist/templates/com.optinomic.apps.pdf.patient.allgemein.html)
 
 [css]
