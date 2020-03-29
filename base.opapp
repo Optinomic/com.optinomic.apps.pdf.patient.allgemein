@@ -1,13 +1,15 @@
 [module]
+id = __opapp_identifier()
 name = Druckvorlagen (PDF)
 short_description = (Patienten-)Druckvorlagen (PDF).
 type = patient
-id = __opapp_identifier()
 version = __opapp_version()
-
 
 [description]
 Allgemeine und spezifische Patienten-Druckvorlagen im PDF Format.
+
+[readme]
+__opapp_include(readme.md)
 
 
 [developer]
@@ -19,10 +21,9 @@ company = Optinomic Gmbh
 phone = +41 (0)44 508 26 76
 website = http://www.optinomic.com/
 
-[readme]
-__opapp_include(readme.md)
-
 
 [template PDF 6 6]
 __opapp_include(optinomic_lib/dist/templates/com.optinomic.apps.pdf.patient.allgemein.html)
+
+[css]
 
