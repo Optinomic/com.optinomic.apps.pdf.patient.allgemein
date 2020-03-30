@@ -55,8 +55,7 @@ This patient-app is currently HOTLOADED!
 
 <script type="text/javascript">
 
-function setValue(obj,access,value){if("string"==typeof access&&(access=access.split(".")),access.length>1){var init=obj[access[0]]||{};setValue(obj[access.shift()]=init,access,value)}else obj[access[0]]=value}addOptinomicExtras=function(obj,api_url){return api_url=api_url||null,obj.api_timestamp=(new Date).toISOString(),obj.api_url=api_url,obj},handleError=function(req,error_action){var error={error:!0,error_message:"Failed with status code: "+req.status,status:req.status,statusText:req.statusText,responseURL:req.responseURL,readyState:req.readyState,error_action:error_action};try{var responseText=JSON.parse(req.responseText);"error"in responseText&&(error.responseErrorText=responseText.error)}catch(err){error.responseErrorText=null}return 0!==req.status&&console.error("(!) "+req.status+" ("+req.statusText+")",error),error},debounce=function(fn,wait){var timeout=null,c=function(){clearTimeout(timeout),timeout=null},t=function(fn){timeout=setTimeout(fn,wait)};return function(){var context=this,args=arguments,f=function(){fn.apply(context,args)};timeout?c()||t(f):t(c)||f()}},formatDateCH=function(date_string){if(null!==(date_string=date_string||null)){var year=parseInt(date_string.substring(0,4)),month=parseInt(date_string.substring(5,7));return parseInt(date_string.substring(8,10))+"."+month+"."+year}return null},createPatientExtras=function(patient){var dateString,today,birthDate,age,m;patient.extras={},patient.extras.age=(dateString=patient.birthdate,today=new Date,birthDate=new Date(dateString),age=today.getFullYear()-birthDate.getFullYear(),((m=today.getMonth()-birthDate.getMonth())<0||0===m&&today.getDate()<birthDate.getDate())&&age--,age),patient.extras.birthday=formatDateCH(patient.birthdate),patient.extras.birthday_age=patient.extras.birthday+" | "+patient.extras.age,patient.extras.name=patient.last_name+" "+patient.first_name;var birthYear=new Date(patient.birthdate);birthYear=birthYear.getFullYear(),patient.extras.secure=patient.last_name.substring(0,1)+". "+patient.first_name.substring(0,1)+". ("+birthYear+")","male"===patient.gender?(patient.extras.ansprache="Herr",patient.extras.anrede="Herr "+patient.last_name):(patient.extras.ansprache="Frau",patient.extras.anrede="Frau "+patient.last_name),patient.extras.full_name=patient.extras.ansprache+" "+patient.extras.name+" ("+patient.extras.birthday_age+")",patient.extras.full_address=patient.address1+", "+patient.zip_code+" "+patient.city;var myPhone="";patient.phone_home&&(myPhone=patient.phone_home),patient.phone_mobile&&(myPhone=""!=myPhone?myPhone+", "+patient.phone_mobile:patient.phone_mobile),patient.extras.phone=myPhone,patient.extras.infoline=patient.extras.full_address,""!=myPhone&&(patient.extras.infoline,patient.extras.phone);var myColor="#3F51B5",myColorAccent="#E91E63";return"female"===patient.gender&&(myColor="#E91E63",myColorAccent="#3F51B5"),patient.extras.color_main=myColor,patient.extras.color_accent=myColorAccent,patient.extras},createStayExtras=function(current_stay){current_stay.extras={},current_stay.extras.in_stay=!1,current_stay.stop?(current_stay.extras.duration=Math.floor((Date.parse(current_stay.stop)-Date.parse(current_stay.start))/864e5),current_stay.extras.duration=current_stay.extras.duration+1):current_stay.extras.duration=Math.floor((new Date-Date.parse(current_stay.start))/864e5);var phase=current_stay.phase,translated_de="";return"before_stay"===phase&&(translated_de="Bevorstehende Behandlung",translated_en="the stay starts in the future"),"in_stay"===phase&&(translated_de="In aktueller Behandlung",translated_en="the patient is currently in stay",current_stay.extras.in_stay=!0),"after_exit"===phase&&(translated_de="Die Behandlung wurde vor weniger als 14 Tage beendet",translated_en="the stay ended less than 14 days ago (included)"),"frozen"===phase&&(translated_de="Die Behandlung wurde manuell eingefroren",translated_en="the stay has manually been frozen (no more events, changes, ...)"),"unfrozen"===phase&&(translated_de="Die Behandlung ist abgeschlossen, wurde jedoch zur Bearbeitung wieder geöffnet",translated_en="the stay is complete but has been unfrozen by somebody"),"complete"===phase&&(translated_de="Die Behandlung wurde vor mehr als 14 Tage beendet",translated_en="the stay ended more than 14 days ago"),current_stay.extras.phase_de=translated_de,current_stay.extras.phase_en=translated_en,current_stay.extras.beginn=formatDateCH(current_stay.start),current_stay.extras.from_to=formatDateCH(current_stay.start),current_stay.extras.from_to=current_stay.extras.from_to+" - ",current_stay.stop?(current_stay.extras.from_to=current_stay.extras.from_to+formatDateCH(current_stay.stop),current_stay.extras.ende=formatDateCH(current_stay.stop)):current_stay.extras.from_to=current_stay.extras.from_to+"Unbekannt",current_stay.extras},createEventExtras=function(current_event){var extras={};return extras.created_at=formatDateCH(current_event.created_at),extras.due=formatDateCH(current_event.due),extras.status=current_event.status.charAt(0).toUpperCase()+current_event.status.slice(1),extras.status_de="Undefined","done"===current_event.status&&(extras.status_de="Erledigt",extras.show_do_it_now=!1),"to_be_done"===current_event.status&&(extras.status_de="Offen",extras.show_do_it_now=!0),"aborted"===current_event.status&&(extras.status_de="Abgebrochen",extras.show_do_it_now=!1),"irrelevant"===current_event.status&&(extras.status_de="Nicht relevant",extras.show_do_it_now=!1),extras};
-
+function setValue(obj,access,value){if("string"==typeof access&&(access=access.split(".")),access.length>1){var init=obj[access[0]]||{};setValue(obj[access.shift()]=init,access,value)}else obj[access[0]]=value}addOptinomicExtras=function(obj,api_url){return api_url=api_url||null,obj.api_timestamp=(new Date).toISOString(),obj.api_url=api_url,obj},handleError=function(req,error_action){var error={error:!0,error_message:"Failed with status code: "+req.status,status:req.status,statusText:req.statusText,responseURL:req.responseURL,readyState:req.readyState,error_action:error_action};try{var responseText=JSON.parse(req.responseText);"error"in responseText&&(error.responseErrorText=responseText.error)}catch(err){error.responseErrorText=null}return 0!==req.status&&console.error("(!) "+req.status+" ("+req.statusText+")",error),error},debounce=function(fn,wait){var timeout=null,c=function(){clearTimeout(timeout),timeout=null},t=function(fn){timeout=setTimeout(fn,wait)};return function(){var context=this,args=arguments,f=function(){fn.apply(context,args)};timeout?c()||t(f):t(c)||f()}},formatDateCH=function(date_string){if(null!==(date_string=date_string||null)){var year=parseInt(date_string.substring(0,4)),month=parseInt(date_string.substring(5,7));return parseInt(date_string.substring(8,10))+"."+month+"."+year}return null},createPatientExtras=function(patient){var dateString,today,birthDate,age,m;patient.extras={},patient.extras.age=(dateString=patient.birthdate,today=new Date,birthDate=new Date(dateString),age=today.getFullYear()-birthDate.getFullYear(),((m=today.getMonth()-birthDate.getMonth())<0||0===m&&today.getDate()<birthDate.getDate())&&age--,age),patient.extras.birthday=formatDateCH(patient.birthdate),patient.extras.birthday_age=patient.extras.birthday+" | "+patient.extras.age,patient.extras.name=patient.last_name+" "+patient.first_name;var birthYear=new Date(patient.birthdate);birthYear=birthYear.getFullYear(),patient.extras.birth_year=birthYear,patient.extras.secure=patient.last_name.substring(0,2)+". "+patient.first_name.substring(0,1)+". ("+birthYear+")","male"===patient.gender?(patient.extras.ansprache="Herr",patient.extras.anrede="Herr "+patient.last_name):(patient.extras.ansprache="Frau",patient.extras.anrede="Frau "+patient.last_name),patient.extras.full_name=patient.extras.ansprache+" "+patient.extras.name+" ("+patient.extras.birthday_age+")",patient.extras.full_address=patient.address1+", "+patient.zip_code+" "+patient.city;var myPhone="";patient.phone_home&&(myPhone=patient.phone_home),patient.phone_mobile&&(myPhone=""!=myPhone?myPhone+", "+patient.phone_mobile:patient.phone_mobile),patient.extras.phone=myPhone,patient.extras.infoline=patient.extras.full_address,""!=myPhone&&(patient.extras.infoline,patient.extras.phone);var myColor="#3F51B5",myColorAccent="#E91E63";return"female"===patient.gender&&(myColor="#E91E63",myColorAccent="#3F51B5"),patient.extras.color_main=myColor,patient.extras.color_accent=myColorAccent,patient.extras},createStayExtras=function(current_stay){current_stay.extras={},current_stay.extras.in_stay=!1,current_stay.stop?(current_stay.extras.duration=Math.floor((Date.parse(current_stay.stop)-Date.parse(current_stay.start))/864e5),current_stay.extras.duration=current_stay.extras.duration+1):current_stay.extras.duration=Math.floor((new Date-Date.parse(current_stay.start))/864e5);var phase=current_stay.phase,translated_de="";return"before_stay"===phase&&(translated_de="Bevorstehende Behandlung",translated_en="the stay starts in the future"),"in_stay"===phase&&(translated_de="In aktueller Behandlung",translated_en="the patient is currently in stay",current_stay.extras.in_stay=!0),"after_exit"===phase&&(translated_de="Die Behandlung wurde vor weniger als 14 Tage beendet",translated_en="the stay ended less than 14 days ago (included)"),"frozen"===phase&&(translated_de="Die Behandlung wurde manuell eingefroren",translated_en="the stay has manually been frozen (no more events, changes, ...)"),"unfrozen"===phase&&(translated_de="Die Behandlung ist abgeschlossen, wurde jedoch zur Bearbeitung wieder geöffnet",translated_en="the stay is complete but has been unfrozen by somebody"),"complete"===phase&&(translated_de="Die Behandlung wurde vor mehr als 14 Tage beendet",translated_en="the stay ended more than 14 days ago"),current_stay.extras.phase_de=translated_de,current_stay.extras.phase_en=translated_en,current_stay.extras.beginn=formatDateCH(current_stay.start),current_stay.extras.from_to=formatDateCH(current_stay.start),current_stay.extras.from_to=current_stay.extras.from_to+" - ",current_stay.stop?(current_stay.extras.from_to=current_stay.extras.from_to+formatDateCH(current_stay.stop),current_stay.extras.ende=formatDateCH(current_stay.stop)):current_stay.extras.from_to=current_stay.extras.from_to+"Unbekannt",current_stay},createEventExtras=function(current_event){var extras={};return extras.created_at=formatDateCH(current_event.created_at),extras.due=formatDateCH(current_event.due),extras.status=current_event.status.charAt(0).toUpperCase()+current_event.status.slice(1),extras.status_de="Undefined","done"===current_event.status&&(extras.status_de="Erledigt",extras.show_do_it_now=!1),"to_be_done"===current_event.status&&(extras.status_de="Offen",extras.show_do_it_now=!0),"aborted"===current_event.status&&(extras.status_de="Abgebrochen",extras.show_do_it_now=!1),"irrelevant"===current_event.status&&(extras.status_de="Nicht relevant",extras.show_do_it_now=!1),extras};
 
 var makepdf = (function () {
 
@@ -2947,16 +2946,16 @@ Vue.component('pdf-auswertung-gesamt', {
         "pdf_building": false,
         "pdf_finished": false,
         "pdf_content": [],
-        "needed_apps_data": {
+        "pdf_apps": {
             "production": [{
                     "name": "actinfo_ein",
-                    "title": "act-info",
+                    "title": "ActInfo",
                     "subtitle": "Information network on addiction care and therapy",
                     "identifier": "ch.suedhang.apps.actinfo_ein.production"
                 },
                 {
                     "name": "actinfo_aus",
-                    "title": "act-info",
+                    "title": "ActInfo",
                     "subtitle": "Information network on addiction care and therapy",
                     "identifier": "ch.suedhang.apps.actinfo_aus.production"
                 },
@@ -3023,25 +3022,10 @@ Vue.component('pdf-auswertung-gesamt', {
                 // --------------------------
                 // Build PDF
                 // --------------------------
-                
-                console.warn('doPDF :: Building PDF');
-                this.pdf_status = "Wird erstellt...";
-
-
-            } catch (err) {
-                this.pdf_status = "Fehler beim Erstellen.";
-                console.error('doPDF', err);
-            }
-        },
-        doPDF_old() {
-            try {
-                // --------------------------
-                // Build PDF
-                // --------------------------
                 this.pdf_building = true;
 
                 var pdf = [];
-                var base = this.$store.state.data_apps.base.slice();
+                var base = this.data_apps_array;
 
                 console.warn('doPDF :: Building PDF', base);
                 this.pdf_status = "Wird erstellt...";
@@ -3054,10 +3038,10 @@ Vue.component('pdf-auswertung-gesamt', {
                 var app_title = function (data) {
                     var titel = [];
                     titel.push(makepdf._horizontalLine(100, "#E0E0E0"));
-                    titel.push(makepdf._heading(data.title, data.subtitle, 'h1'));
+                    titel.push(makepdf._heading(data.params.title, data.params.subtitle, 'h1'));
                     titel.push(makepdf._text(data.module.short_description));
 
-                    return makepdf._keepTogether(titel, data.name + '_titel');
+                    return makepdf._keepTogether(titel, data.params.name + '_titel');
                 }.bind(this);
 
 
@@ -3071,12 +3055,12 @@ Vue.component('pdf-auswertung-gesamt', {
                     block.push(makepdf._suedhang_logo_anschrift());
                     block.push(makepdf._title(this.title, this.subtitle));
                     block.push({
-                        "text": "Wir berichten über den Aufenthalt von " + this.patient_extras.anrede + " vom " + this.stay_from_to + ".",
+                        "text": "Wir berichten über den Aufenthalt von " + this.patient_data.extras.anrede + " vom " + this.stay_from_to + ".",
                         "style": "p"
                     });
                     block.push(makepdf._spacer(96));
                     block.push(makepdf._horizontalLine(62, "#F5F5F5"));
-                    block.push(makepdf._stamp(this.patient_extras.full_name, 18));
+                    block.push(makepdf._stamp(this.patient_data.extras.full_name, 18));
                     block.push(makepdf._horizontalLine(62, "#F5F5F5"));
 
                     var title_block = {
@@ -3102,18 +3086,26 @@ Vue.component('pdf-auswertung-gesamt', {
 
                 var actinfo = function () {
                     var pdf = [];
-                    var name = 'actinfo';
+                    const current_app_name = 'actinfo';
                     try {
                         var data_ein = this.getAppBaseData('actinfo_ein');
+                        data_ein.module = this.get_current_patient_module('actinfo_ein');
                         var data_aus = this.getAppBaseData('actinfo_aus');
-                        // console.error('actinfo', data_ein, data_aus);
 
-                        // Build PDF from Plugin
-                        var pdf = this.pdf_build_actinfo(data_ein, data_aus);
+                        var block = [];
+
+                        // Titel
+                        block.push(app_title(data_ein));
+
+                        // Content from Plugin
+                        block.push(this.actinfo_pdf_content(data_ein, data_aus));
+
+
                         this.pdf_create_count = this.pdf_create_count + 1;
+                        return block;
 
                     } catch (e) {
-                        pdf.push(makepdf._keepTogether(makepdf._indication('!', 'Error'), name + '_error'));
+                        pdf.push(makepdf._keepTogether(makepdf._indication('!', 'Error'), current_app_name + '_error'));
                     };
 
                     this.pdf_create_count = this.pdf_create_count + 1;
@@ -3128,8 +3120,10 @@ Vue.component('pdf-auswertung-gesamt', {
                 // ------------------------------------------
 
                 var tmt = function () {
-                    var data = this.getAppBaseData('tmt');
-                    console.error('tmt', data);
+                    const current_app_name = 'tmt';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
 
                     var block = [];
 
@@ -3137,7 +3131,7 @@ Vue.component('pdf-auswertung-gesamt', {
                     block.push(app_title(data));
 
                     // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), current_app_name + '_todo'));
 
                     this.pdf_create_count = this.pdf_create_count + 1;
                     return block;
@@ -3150,16 +3144,19 @@ Vue.component('pdf-auswertung-gesamt', {
                 // ------------------------------------------
 
                 var bdi = function () {
-                    var data = this.getAppBaseData('bdi');
-                    console.error('bdi', data);
+                    const current_app_name = 'bdi';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
 
                     var block = [];
 
                     // Titel
                     block.push(app_title(data));
 
-                    // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    // Content from Plugin
+                    block.push(this.bdi_pdf_content(data));
+
 
                     this.pdf_create_count = this.pdf_create_count + 1;
                     return block;
@@ -3172,8 +3169,10 @@ Vue.component('pdf-auswertung-gesamt', {
                 // ------------------------------------------
 
                 var aase = function () {
-                    var data = this.getAppBaseData('aase');
-                    console.error('aase', data);
+                    const current_app_name = 'aase';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
 
                     var block = [];
 
@@ -3181,7 +3180,7 @@ Vue.component('pdf-auswertung-gesamt', {
                     block.push(app_title(data));
 
                     // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), current_app_name + '_todo'));
 
                     this.pdf_create_count = this.pdf_create_count + 1;
                     return block;
@@ -3189,21 +3188,48 @@ Vue.component('pdf-auswertung-gesamt', {
                 pdf.push(aase());
 
 
+
                 // ------------------------------------------
-                // whoqol
+                // bscl
                 // ------------------------------------------
 
-                var whoqol = function () {
-                    var data = this.getAppBaseData('whoqol');
-                    console.error('whoqol', data);
+                var bscl = function () {
+                    const current_app_name = 'bscl';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
 
                     var block = [];
 
                     // Titel
                     block.push(app_title(data));
 
-                    // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    // Content from Plugin
+                    block.push(this.bscl_pdf_content(data));
+
+                    this.pdf_create_count = this.pdf_create_count + 1;
+                    return block;
+                }.bind(this);
+                pdf.push(bscl());
+
+
+                // ------------------------------------------
+                // whoqol
+                // ------------------------------------------
+
+                var whoqol = function () {
+                    const current_app_name = 'whoqol';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
+
+                    var block = [];
+
+                    // Titel
+                    block.push(app_title(data));
+
+                    // Content from Plugin
+                    block.push(this.whoqol_pdf_content(data));
 
                     this.pdf_create_count = this.pdf_create_count + 1;
                     return block;
@@ -3216,8 +3242,10 @@ Vue.component('pdf-auswertung-gesamt', {
                 // ------------------------------------------
 
                 var isk = function () {
-                    var data = this.getAppBaseData('isk');
-                    console.error('isk', data);
+                    const current_app_name = 'isk';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
 
                     var block = [];
 
@@ -3225,7 +3253,7 @@ Vue.component('pdf-auswertung-gesamt', {
                     block.push(app_title(data));
 
                     // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), current_app_name + '_todo'));
 
                     this.pdf_create_count = this.pdf_create_count + 1;
                     return block;
@@ -3239,8 +3267,10 @@ Vue.component('pdf-auswertung-gesamt', {
                 // ------------------------------------------
 
                 var sci = function () {
-                    var data = this.getAppBaseData('sci');
-                    console.error('sci', data);
+                    const current_app_name = 'sci';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
+                    console.error(current_app_name, data);
 
                     var block = [];
 
@@ -3248,7 +3278,7 @@ Vue.component('pdf-auswertung-gesamt', {
                     block.push(app_title(data));
 
                     // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), current_app_name + '_todo'));
 
                     this.pdf_create_count = this.pdf_create_count + 1;
                     return block;
@@ -3261,19 +3291,19 @@ Vue.component('pdf-auswertung-gesamt', {
                 // ------------------------------------------
 
                 var rs13 = function () {
-                    var data = this.getAppBaseData('rs13');
-                    console.error('rs13', data);
+                    const current_app_name = 'rs13';
+                    var data = this.getAppBaseData(current_app_name);
+                    data.module = this.get_current_patient_module(current_app_name);
 
-                    var block = [];
+                    // Build PDF
+                    var pdf = [];
+                    pdf.push(app_title(data));
 
-                    // Titel
-                    block.push(app_title(data));
-
-                    // Content
-                    block.push(makepdf._keepTogether(makepdf._indication('!', 'ToDo'), data.name + '_todo'));
+                    // Content from Plugin
+                    pdf.push(this.rs13_pdf_content(data));
 
                     this.pdf_create_count = this.pdf_create_count + 1;
-                    return block;
+                    return pdf;
                 }.bind(this);
                 pdf.push(rs13());
 
@@ -3290,23 +3320,36 @@ Vue.component('pdf-auswertung-gesamt', {
         },
         getAppBaseData(app_name) {
             try {
-                var da = this.$store.state.data_apps.base.slice();
-                var return_obj = {};
+                var return_obj = null;
                 this.data_apps_array.forEach(function (app) {
                     if (app.name === app_name) {
-                        return_obj = Object.assign({}, app);
-
-                        this.patient_modules.forEach(function (pm) {
-                            if (pm.identifier === return_obj.identifier) {
-                                return_obj.module = Object.assign({}, pm.module);
-                            };
-                        }.bind(this));
-
+                        return_obj = this.get_app_data(app.identifier);
                     };
                 }.bind(this));
                 return return_obj;
             } catch (err) {
                 console.error('getAppBaseData', err);
+                return null;
+            }
+        },
+        get_current_patient_module(name) {
+            try {
+                if (this.production) {
+
+                    var return_obj = null;
+                    this.pdf_apps.production.forEach(function (app) {
+                        if (app.name === name) {
+                            this.patient_modules.forEach(function (mod) {
+                                if (mod.identifier === app.identifier) {
+                                    return_obj = Object.assign({}, mod.module);
+                                };
+                            }.bind(this));
+                        };
+                    }.bind(this));
+                    return return_obj;
+                };
+            } catch (err) {
+                console.error('get_current_patient_module', err);
                 return null;
             }
         }
@@ -3315,12 +3358,13 @@ Vue.component('pdf-auswertung-gesamt', {
         data_apps_array() {
             try {
                 if (this.production) {
-                    return this.needed_apps_data.production.slice();
+                    return this.pdf_apps.production.slice();
                 } else {
                     return [];
                 };
             } catch (e) {
-                return [];
+                console.error('data_apps_array', e);
+                return null;
             };
         },
         readyforPDF() {
@@ -3329,24 +3373,22 @@ Vue.component('pdf-auswertung-gesamt', {
 
                 this.data_apps_array.forEach(function (app) {
                     var data = this.get_app_data(app.identifier);
-                   
+
                     if (data !== undefined) {
                         if (data.loaded !== true) {
                             ret_val = false;
                         };
                     } else {
-                        ret_val = false;    
+                        ret_val = false;
                     };
                 }.bind(this));
 
                 if (this.stay_current_data.found === false) {
                     ret_val = false;
                 };
-                // console.error('computed data_apps_array_loaded', da);
-                 console.error('readyforPDF', ret_val);
                 return ret_val;
             } catch (e) {
-                console.error('eeeeeeeee', e);
+                console.error('readyforPDF', e);
                 return false;
             };
         },
@@ -3381,7 +3423,7 @@ Vue.component('pdf-auswertung-gesamt', {
 
                 this.pdf_status = "Daten werden geladen...";
 
-                this.needed_apps_data.production.forEach(function (app, appID) {
+                this.pdf_apps.production.forEach(function (app, appID) {
                     this.$store.dispatch('getSurveyResponses', app);
                 }.bind(this));
             };
@@ -3422,13 +3464,12 @@ Vue.component('pdf-auswertung-gesamt', {
 
         </div>
         <div v-else>
-            <optinomic-pdfmake :header-left="patient_secure" :footer-left="title" header-right="Klinik Südhang"
+            <optinomic-pdfmake :header-left="patient_data.extras.secure" :footer-left="title" header-right="Klinik Südhang"
                 :document-title="title" :content="pdf_content" hide-logo></optinomic-pdfmake>
         </div>
     </div>
     `
 });
-
 
 // app-pdf-druckvorlagen
 Vue.component('app-pdf-druckvorlagen', {
@@ -3701,7 +3742,7 @@ Vue.component('app-pdf-druckvorlagen', {
                 </optinomic-pdfmake>
             </optinomic-content-block>
 
-            <optinomic-content-block v-if="pdf_apps_ready" title="Gesamtauswertung" subtitle="Fallkonferenz" id="pdf_gesamtauswertung">
+            <optinomic-content-block v-if="pdf_apps_ready" title="Gesamtauswertung" subtitle="Fallkonferenz (UNDER CONSTRUCTION!)" id="pdf_gesamtauswertung">
                 <pdf-auswertung-gesamt></pdf-auswertung-gesamt>
             </optinomic-content-block>
             
@@ -3748,7 +3789,7 @@ const optinomic_globals = {
                 },
                 get_app_data(identifier) {
                     try {
-                        return this.$store.state.data_apps.data_object[identifier]
+                        return this.$store.state.data_apps.data_object[identifier];
                     } catch (err) {
                         console.error('get_app_data', err);
                         return null;
@@ -3823,7 +3864,6 @@ const optinomic_globals = {
 };
 Vue.use(optinomic_globals)
 
-
 // Plugin: pdf_globals
 const pdf_globals = {
     install(Vue, options) {
@@ -3863,6 +3903,16 @@ const pdf_globals = {
                         pdf.push(this.pdf_app_title(m.name, m.short_description, m.description));
                         return makepdf._keepTogether(pdf, m.name + '_appinfo');
                     };
+                },
+                get_pdf_chart_options(options) {
+                    try {
+                        var copy = Object.assign({}, options);
+                        copy.item_height = copy.item_height - 12;
+                        return copy;
+                    } catch (err) {
+                        console.error('get_pdf_chart_options', err);
+                        return options;
+                    }
                 }
             }
         });
@@ -3983,13 +4033,10 @@ const plugin_rs13 = {
                         if (sr.data.length > 0) {
 
                             // Chart | Grafik
-                            var subtitle = [];
-                            subtitle.push(makepdf._horizontalLine(100, "#F5F5F5"));
-                            subtitle.push(makepdf._heading(this.base_config.app_short_description, null, 'h3'));
-                            pdf.push(makepdf._keepTogether(subtitle, "rs13_chart_title"));
-
                             var pdf_chart = [];
-                            pdf_chart.push(makepdf._pdf_chart_profile("de", this.rs13_chart.options, {}, {}, [], this.rs13_chart.scales, sr, this.rs13_chart.ranges));
+                            pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                            pdf_chart.push(makepdf._pdf_chart_profile("de", this.get_pdf_chart_options(this.rs13_chart.options), {}, {}, [], this.rs13_chart.scales, sr, this.rs13_chart.ranges));
+                            pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
                             pdf_chart.push(makepdf._spacer(10));
                             pdf.push(makepdf._keepTogether(pdf_chart, "rs13_chart"));
 
@@ -4027,8 +4074,903 @@ const plugin_rs13 = {
         });
     }
 };
-Vue.use(plugin_rs13)
+Vue.use(plugin_rs13);
 
+// Plugin: plugin_actinfo
+const plugin_actinfo = {
+    install(Vue, options) {
+        Vue.mixin({
+            data: function () {
+                return {
+                    "actinfo_audit_chart": {
+                        "options": {
+                            "min": -1,
+                            "max": 41,
+                            "item_height": 50,
+                            "item_text_left": 130,
+                            "item_text_right": 130,
+                            "color_grid": "#9E9E9E",
+                            "color_clinic_sample": "#888888",
+                            "color_skin": "grey_dark_to_light",
+                            "show_baseline": false,
+                            "show_ranges_overview": false,
+                            "show_scale_text": true,
+                            "show_score_vertical_line": true,
+                            "show_score_profile_line": false,
+                            "show_score_circles": true,
+                            "show_settings_block": false,
+                            "allow_toggle_settings_block": false,
+                            "topnumber_hide_first_last": true,
+                            "range_alpha": 0.09,
+                            "vertical_grid_every_x": 5,
+                            "response_title_path": "calculation.actinfo_ein.messzeitpunkt.mz_text",
+                            "response_date_path": "date"
+                        },
+                        "scales": [{
+                            "left_title": "",
+                            "left_text": "Risikoarmer Alkoholkonsum",
+                            "right_title": "",
+                            "right_text": "Verdacht auf Alkoholabhängigkeit",
+                            "score_path": "calculation.actinfo_ein.AUDIT.AUDIT_Score",
+                            "clinic_sample_var": null
+                        }],
+                        "ranges": [{
+                            "range_start": 0,
+                            "range_stop": 7.5,
+                            "text": "Risikoarmer Alkoholkonsum",
+                            "color": "#2E7D32"
+                        }, {
+                            "range_start": 7.5,
+                            "range_stop": 15.5,
+                            "text": "Verdacht auf eine alkoholbezogene Störung",
+                            "color": "#FBB100"
+                        }, {
+                            "range_start": 15.5,
+                            "range_stop": 40,
+                            "text": "Hohe Wahrscheinlichkeit einer Alkoholabhängigkeit",
+                            "color": "#C62828"
+                        }]
+                    },
+                    "actinfo_fagerstroem_chart": {
+                        "options": {
+                            "min": -1,
+                            "max": 11,
+                            "item_height": 50,
+                            "item_text_left": 130,
+                            "item_text_right": 130,
+                            "color_grid": "#9E9E9E",
+                            "color_clinic_sample": "#888888",
+                            "color_skin": "grey_dark_to_light",
+                            "show_baseline": false,
+                            "show_ranges_overview": false,
+                            "show_scale_text": true,
+                            "show_score_vertical_line": true,
+                            "show_score_profile_line": false,
+                            "show_score_circles": true,
+                            "show_settings_block": false,
+                            "allow_toggle_settings_block": false,
+                            "topnumber_hide_first_last": true,
+                            "range_alpha": 0.09,
+                            "vertical_grid_every_x": 1,
+                            "response_title_path": "app_name",
+                            "response_date_path": "date"
+                        },
+                        "scales": [{
+                            "left_title": "",
+                            "left_text": "Geringe Abhängigkeit",
+                            "right_title": "",
+                            "right_text": "Starke Abhängigkeit",
+                            "score_path": "FAGERSTROEM.FAGERSTROEM_Score",
+                            "clinic_sample_var": null
+                        }],
+                        "ranges": [{
+                            "range_start": 0,
+                            "range_stop": 2.5,
+                            "text": "Gering",
+                            "color": "#2E7D32"
+                        }, {
+                            "range_start": 2.5,
+                            "range_stop": 4.5,
+                            "text": "Mittelstark",
+                            "color": "#FFA000"
+                        }, {
+                            "range_start": 4.5,
+                            "range_stop": 6.5,
+                            "text": "Stark",
+                            "color": "#FB7200"
+                        }, {
+                            "range_start": 6.5,
+                            "range_stop": 10,
+                            "text": "Sehr stark",
+                            "color": "#C62828"
+                        }]
+                    }
+                }
+            },
+            methods: {
+                merge_data_ein_aus: function (_sr_actinfo_ein, _sr_actinfo_aus) {
+                    var _sr_actinfo = [];
+                    var show_audit = false;
+                    var show_fagerstoem = false;
+
+                    if (_sr_actinfo_ein.have_data === true) {
+                        _sr_actinfo_ein.data.forEach(function (current) {
+                            if (current.all_found === true) {
+                                current.app_name = 'Eintritt';
+                                current.actinfo_ein_data = true;
+                                current.actinfo_aus_data = false;
+                                current.FAGERSTROEM = current.calculation.actinfo_ein.FAGERSTROEM;
+                                if ("smoker" in current.FAGERSTROEM) {
+                                    if (current.FAGERSTROEM.smoker.smoker === true) {
+                                        show_fagerstoem = true;
+                                    };
+                                };
+                                if ((current.calculation.actinfo_ein.AUDIT.AUDIT_Score !== 0) && (current.calculation.actinfo_ein.AUDIT.AUDIT_Score !== null) && (current.calculation.actinfo_ein.AUDIT.AUDIT_Score !== undefined)) {
+                                    show_audit = true;
+                                };
+                                current.info = current.app_name + ': ' + current.FAGERSTROEM.interpretation.result;
+                                _sr_actinfo.push(current);
+                            };
+                        }.bind(this));
+                    };
+
+                    if (_sr_actinfo_aus.have_data === true) {
+                        _sr_actinfo_aus.data.forEach(function (current) {
+                            if (current.all_found === true) {
+                                current.app_name = 'Austritt';
+                                current.actinfo_ein_data = false;
+                                current.actinfo_aus_data = true;
+                                current.FAGERSTROEM = current.calculation.another_calculation.FAGERSTROEM;
+                                if ("smoker" in current.FAGERSTROEM) {
+                                    if (current.FAGERSTROEM.smoker.smoker === true) {
+                                        show_fagerstoem = true;
+                                    };
+                                };
+                                current.info = current.app_name + ': ' + current.FAGERSTROEM.interpretation.result;
+                                _sr_actinfo.push(current);
+                            };
+
+                        }.bind(this));
+                    };
+
+                    // Build some Texts
+                    var audit_text = "";
+                    var fagerstroem_text = "";
+                    var motivation_text = "";
+                    _sr_actinfo.forEach(function (item, itemID) {
+                        if (item.actinfo_ein_data) {
+
+                            audit_text = "Bei Eintritt bestand «" + item.calculation.actinfo_ein.AUDIT.interpretation.result + "» (∑=" + item.calculation.actinfo_ein.AUDIT.AUDIT_Score + ")."
+
+
+                            if ("smoker" in item.FAGERSTROEM) {
+                                if ("summyary" in item.FAGERSTROEM.smoker) {
+                                    if (fagerstroem_text !== "") {
+                                        fagerstroem_text = fagerstroem_text + " "
+                                    };
+                                    fagerstroem_text = fagerstroem_text + item.FAGERSTROEM.smoker.summyary;
+                                };
+                            };
+                        };
+                        if (item.actinfo_aus_data) {
+                            if ("smoker" in item.FAGERSTROEM) {
+                                if ("summyary" in item.FAGERSTROEM.smoker) {
+                                    if (fagerstroem_text !== "") {
+                                        fagerstroem_text = fagerstroem_text + " "
+                                    };
+                                    fagerstroem_text = fagerstroem_text + item.FAGERSTROEM.smoker.summyary;
+                                };
+                                if (item.FAGERSTROEM.smoker.motivation_data) {
+                                    if (fagerstroem_text !== "") {
+                                        fagerstroem_text = fagerstroem_text + " "
+                                    };
+                                    fagerstroem_text = fagerstroem_text + item.FAGERSTROEM.smoker.motivation_full_text;
+                                    motivation_text = motivation_text + item.FAGERSTROEM.smoker.motivation_full_text;
+                                };
+                            };
+                        };
+                    }.bind(this));
+
+                    var actinfo_obj = {
+                        "merged": true,
+                        "actinfo_ein_data": _sr_actinfo_ein.have_data,
+                        "actinfo_aus_data": _sr_actinfo_aus.have_data,
+                        "actinfo_ein_aus_data": false,
+                        "show_audit": show_audit,
+                        "audit_text": audit_text,
+                        "show_fagerstoem": show_fagerstoem,
+                        "fagerstroem_text": fagerstroem_text,
+                        "motivation_text": motivation_text,
+                        "data": _sr_actinfo,
+                        "app_id": "actinfo - Ein & Austritt"
+                    };
+
+                    if ((_sr_actinfo_ein.have_data === true) && (_sr_actinfo_aus.have_data === true)) {
+                        actinfo_obj.actinfo_ein_aus_data = true;
+                    };
+
+                    return actinfo_obj;
+
+                },
+                actinfo_pdf_content: function (_sr_actinfo_ein, _sr_actinfo_aus) {
+                    var _sr_actinfo_merged = this.merge_data_ein_aus(_sr_actinfo_ein, _sr_actinfo_aus);
+                    console.error('pdf_build_actinfo :: ', _sr_actinfo_merged);
+
+                    var _pdf_content = [];
+
+                    var problemsubstanzen = "";
+                    var zusatzangaben = "";
+                    _sr_actinfo_ein.data.forEach(function (current, ID) {
+                        problemsubstanzen = current.calculation.actinfo_ein.pdfmake.problemsubstanzen_ol;
+                        zusatzangaben = current.calculation.actinfo_ein.pdfmake.zusatzangaben_text;
+                    });
+
+                    var ps = [];
+                    ps.push(problemsubstanzen);
+                    ps.push(makepdf._spacer(6));
+                    zusatzangaben.stack["0"].text = "Zusatzinformationen: " + zusatzangaben.stack["0"].text
+                    ps.push(zusatzangaben);
+                    _pdf_content.push(makepdf._keepTogether(ps, "problemsubstanzen"));
+
+                    if (_sr_actinfo_merged.show_audit) {
+                        var audit = [];
+                        audit.push(makepdf._heading("AUDIT (Alcohol Use Disorders Identification)", null, 'h3'));
+                        audit.push(makepdf._text(_sr_actinfo_merged.audit_text));
+                        _pdf_content.push(makepdf._keepTogether(audit, "audit_text"));
+
+                        var pdf_chart = [];
+                        pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                        pdf_chart.push(makepdf._pdf_chart_profile("de", this.get_pdf_chart_options(this.actinfo_audit_chart.options), {}, {}, [], this.actinfo_audit_chart.scales, _sr_actinfo_ein, this.actinfo_audit_chart.ranges));
+                        pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                        _pdf_content.push(makepdf._keepTogether(pdf_chart, "audit_chart"));
+                    };
+
+                    if (_sr_actinfo_merged.show_fagerstoem) {
+                        var fagerstroem = [];
+                        fagerstroem.push(makepdf._heading("Nikotinabhängigkeit (Fagerström)", null, 'h3'));
+                        fagerstroem.push(makepdf._text(_sr_actinfo_merged.fagerstroem_text));
+                        _pdf_content.push(makepdf._keepTogether(fagerstroem, "fagerstroem_text"));
+
+                        var pdf_chart = [];
+                        pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                        pdf_chart.push(makepdf._pdf_chart_profile("de", this.get_pdf_chart_options(this.actinfo_fagerstroem_chart.options), {}, {}, [], this.actinfo_fagerstroem_chart.scales, _sr_actinfo_merged, this.actinfo_fagerstroem_chart.ranges));
+                        pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                        _pdf_content.push(makepdf._keepTogether(pdf_chart, "fagerstroem_chart"));
+                    };
+
+                    return _pdf_content;
+                }
+            }
+        });
+    }
+};
+Vue.use(plugin_actinfo);
+
+// Plugin: plugin_bdi
+const plugin_bdi = {
+    install(Vue, options) {
+        Vue.mixin({
+            data: function () {
+                return {
+                    "name": "BDI-II",
+                    "bdi_chart": {
+                        "options": {
+                            "min": -1.5,
+                            "max": 64.5,
+                            "item_height": 50,
+                            "item_text_left": 130,
+                            "item_text_right": 130,
+                            "color_grid": "#9E9E9E",
+                            "color_clinic_sample": "#888888",
+                            "color_skin": "grey_dark_to_light",
+                            "show_baseline": false,
+                            "show_ranges_overview": false,
+                            "show_scale_text": false,
+                            "show_score_vertical_line": true,
+                            "show_score_profile_line": false,
+                            "show_score_circles": true,
+                            "show_settings_block": false,
+                            "allow_toggle_settings_block": false,
+                            "topnumber_hide_first_last": true,
+                            "range_alpha": 0.09,
+                            "vertical_grid_every_x": 3,
+                            "response_title_path": "calculation.bdi_score.score.current_range.interpretation_de",
+                            "response_date_path": "date"
+                        },
+                        "scales": [{
+                            "left_title": "Keine Depression",
+                            "left_text": "",
+                            "right_title": "Verdacht auf eine schwere Depression",
+                            "right_text": "",
+                            "score_path": "calculation.bdi_score.score.score",
+                            "clinic_sample_var": null
+                        }],
+                        "ranges": [{
+                            "range_start": 0,
+                            "range_stop": 8.5,
+                            "text": "Keine Depression",
+                            "color": "#2E7D32"
+                        }, {
+                            "range_start": 8.5,
+                            "range_stop": 13.5,
+                            "text": "V.a. eine minimale Depression",
+                            "color": "#FFA000"
+                        }, {
+                            "range_start": 13.5,
+                            "range_stop": 19.5,
+                            "text": "V.a. eine leichte Depression",
+                            "color": "#FBB100"
+                        }, {
+                            "range_start": 19.5,
+                            "range_stop": 28.5,
+                            "text": "V.a. eine mittelschwere Depression",
+                            "color": "#FB7200"
+                        }, {
+                            "range_start": 28.5,
+                            "range_stop": 63,
+                            "text": "V.a. eine schwere Depression",
+                            "color": "#C62828"
+                        }]
+                    }
+                }
+            },
+            methods: {
+                bdi_pdf_content: function (sr) {
+                    var pdf = [];
+                    try {
+                        if (sr.data.length > 0) {
+
+                            var pdf_chart = [];
+                            pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                            pdf_chart.push(makepdf._pdf_chart_profile("de", this.get_pdf_chart_options(this.bdi_chart.options), {}, {}, [], this.bdi_chart.scales, sr, this.bdi_chart.ranges));
+                            pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+
+                            pdf.push(makepdf._keepTogether(pdf_chart, "audit_chart"));
+
+                        } else {
+                            pdf.push(this.pdf_no_data(this.name));
+                        };
+
+                    } catch (e) {
+                        console.log('a_pdf_content', e)
+                        pdf.push(this.pdf_error(this.name));
+                    };
+
+                    return pdf;
+                }
+            }
+        });
+    }
+};
+Vue.use(plugin_bdi);
+
+// Plugin: plugin_whoqol
+const plugin_whoqol = {
+    install(Vue, options) {
+        Vue.mixin({
+            data: function () {
+                return {
+                    "name": "WHOQOL-BREF",
+                    "whoqol_chart": {
+                        "options": {
+                            "min": -2,
+                            "max": 5,
+                            "item_height": 75,
+                            "item_text_left": 120,
+                            "item_text_right": 120,
+                            "color_grid": "#9E9E9E",
+                            "color_clinic_sample": "#888888",
+                            "color_skin": "grey_dark_to_light",
+                            "show_baseline": false,
+                            "show_ranges_overview": false,
+                            "show_scale_text": true,
+                            "show_score_vertical_line": false,
+                            "show_score_profile_line": true,
+                            "show_score_circles": true,
+                            "show_settings_block": false,
+                            "allow_toggle_settings_block": true,
+                            "topnumber_hide_first_last": false,
+                            "range_alpha": 0.09,
+                            "vertical_grid_every_x": 1,
+                            "norm_sample": "Z-Normierung anhand von Gesunden",
+                            "response_title_path": "calculation.phys_psych_calculation.info.mz.mz_typ",
+                            "response_date_path": "date"
+                        },
+                        "scales": [{
+                            "left_title": "Körperliche Lebensqualität",
+                            "left_text": "Hoch",
+                            "right_title": "Körperliche Lebensqualität",
+                            "right_text": "Vermindert",
+                            "score_path": "calculation.phys_psych_calculation.all_results.koerperliche_lebensqualitaet_z_score_inverted",
+                            "clinic_sample_var": "koerperliche_lebensqualitaet_z_score_inverted"
+                        }, {
+                            "id": 1,
+                            "left_title": "Psychische Lebensqualität",
+                            "left_text": "Hoch",
+                            "right_title": "Psychische Lebensqualität",
+                            "right_text": "Vermindert",
+                            "score_path": "calculation.phys_psych_calculation.all_results.psychische_lebensqualitaet_z_score_inverted",
+                            "clinic_sample_var": "psychische_lebensqualitaet_z_score_inverted"
+                        }],
+                        "ranges": [{
+                            "range_start": -999,
+                            "range_stop": 1,
+                            "text": "Normale Lebensqualität",
+                            "color": "#2E7D32"
+                        }, {
+                            "range_start": 2,
+                            "range_stop": 999,
+                            "text": "Verminderte Lebensqualität",
+                            "color": "#C62828"
+                        }]
+                    }
+                }
+            },
+            methods: {
+                whoqol_pdf_content: function (sr) {
+                    var pdf = [];
+                    try {
+                        if (sr.data.length > 0) {
+
+                            var pdf_chart = [];
+                            pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                            pdf_chart.push(makepdf._pdf_chart_profile("de", this.get_pdf_chart_options(this.whoqol_chart.options), {}, {}, [], this.whoqol_chart.scales, sr, this.whoqol_chart.ranges));
+                            pdf_chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+
+                            pdf.push(makepdf._keepTogether(pdf_chart, "audit_chart"));
+
+                        } else {
+                            pdf.push(this.pdf_no_data(this.name));
+                        };
+
+                    } catch (e) {
+                        console.log('a_pdf_content', e)
+                        pdf.push(this.pdf_error(this.name));
+                    };
+
+                    return pdf;
+                }
+            }
+        });
+    }
+};
+Vue.use(plugin_whoqol);
+
+// Plugin: plugin_bscl_anq
+const plugin_bscl_anq = {
+    install(Vue, options) {
+        Vue.mixin({
+            data: function () {
+                return {
+                    "name": "BSCL",
+                    "bscl_chart": {
+                        "options": {
+                            "min": -2,
+                            "max": 14,
+                            "item_height": 58,
+                            "item_text_left": 100,
+                            "item_text_right": 370,
+                            "color_grid": "#9E9E9E",
+                            "color_clinic_sample": "#888888",
+                            "color_skin": "grey_dark_to_light",
+                            "show_baseline": false,
+                            "show_ranges_overview": false,
+                            "show_scale_text": true,
+                            "show_score_vertical_line": false,
+                            "show_score_profile_line": true,
+                            "show_score_circles": true,
+                            "show_settings_block": false,
+                            "allow_toggle_settings_block": true,
+                            "topnumber_hide_first_last": false,
+                            "range_alpha": 0.09,
+                            "vertical_grid_every_x": 2,
+                            "response_title_path": "calculation.scores_calculation.info.mz.mz_typ",
+                            "response_date_path": "calculation.scores_calculation.info.mz.mz_date",
+                            "norm_sample": "Gesunde Normstichprobe (N=300)",
+                            "dropout": "calculation.scores_calculation.info.mz.dropout",
+                            "dropout_reason": "calculation.scores_calculation.info.mz.dropout_reason"
+                        },
+                        "scales": [{
+                            "left_title": "Somatisierung",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Kopfschmerzen, Herzbeschwerden, Atemprobleme, Magenbeschwerden, Muskelschmerzen, Schwächegefühl, Schweregefühl, Unwohlsein usw.",
+                            "m_norm": [0.23, 0.32],
+                            "sd_norm": [0.31, 0.33],
+                            "score_path": "calculation.scores_calculation.all_results.somatisierung_z_score",
+                            "clinic_sample_var": "somatisierung_z_score",
+                            "items": 7
+                        }, {
+                            "left_title": "Zwanghaftigkeit",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Gedanken, Impulse und Handlungen, die konstant vorhanden und nicht änderbar und ich-fremd oder ungewollt erlebt werden, Kognitive Leistungsstörungen.",
+                            "m_norm": [0.50, 0.54],
+                            "sd_norm": [0.46, 0.43],
+                            "score_path": "calculation.scores_calculation.all_results.zwanghaftigkeit_z_score",
+                            "clinic_sample_var": "zwanghaftigkeit_z_score",
+                            "items": 6
+                        }, {
+                            "left_title": "Unsicherheit im Sozialkontakt",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Minderwertigkeitsgefühle, Selbstabwertungen, Selbstzweifel, Selbstunsicherheit und negative Erwartungen bzgl. dem eigenen zwischenmenschlichen Verhalten.",
+                            "m_norm": [0.35, 0.49],
+                            "sd_norm": [0.40, 0.45],
+                            "score_path": "calculation.scores_calculation.all_results.unsicherheit_im_sozialkontakt_z_score",
+                            "clinic_sample_var": "unsicherheit_im_sozialkontakt_z_score",
+                            "items": 4
+                        }, {
+                            "left_title": "Depressivität",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Gedrückte Stimmung, Gesunkenes Interesse am Leben, Verringerte Motivation und Energie, Hoffnungslosigkeit, bis hin zu Suizidgedanken.",
+                            "m_norm": [0.24, 0.33],
+                            "sd_norm": [0.32, 0.40],
+                            "score_path": "calculation.scores_calculation.all_results.depressivit__t_z_score",
+                            "clinic_sample_var": "depressivit__t_z_score",
+                            "items": 6
+                        }, {
+                            "left_title": "Ängstlichkeit",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Angst mit Nervosität, Spannungen und Zittern, Panikattacken und Schreckgefühlen, Gefühle von Besorgnis und Furcht.",
+                            "m_norm": [0.29, 0.39],
+                            "sd_norm": [0.31, 0.36],
+                            "score_path": "calculation.scores_calculation.all_results.__ngstlichkeit_z_score",
+                            "clinic_sample_var": "__ngstlichkeit_z_score",
+                            "items": 6
+                        }, {
+                            "left_title": "Aggressivität / Feindseligkeit",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Reizbarkeit und Unausgeglichenheit bis hin zu starker Aggressivität. Ärger, Aggression, Irritierbarkeit, Zorn und Verstimmung.",
+                            "m_norm": [0.29, 0.37],
+                            "sd_norm": [0.35, 0.33],
+                            "score_path": "calculation.scores_calculation.all_results.aggressivit__t___feindseligkeit_z_score",
+                            "clinic_sample_var": "aggressivit__t___feindseligkeit_z_score",
+                            "items": 5
+                        }, {
+                            "left_title": "Phobische Angst",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Andauernde und unangemessene Furcht als Reaktion auf eine bestimmte Person, einen Platz, ein Objekt oder eine charakteristische Situation, die zu Vermeidungs- oder Fluchtverhalten führt.",
+                            "m_norm": [0.14, 0.16],
+                            "sd_norm": [0.23, 0.25],
+                            "score_path": "calculation.scores_calculation.all_results.phobische_angst_z_score",
+                            "clinic_sample_var": "phobische_angst_z_score",
+                            "items": 5
+                        }, {
+                            "left_title": "Paranoides Denken",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Misstrauen, Minderwertigkeitsgefühle, paranoides Denken: Gedankenprojektion, Feindseligkeit, Argwohn, Grandiosität, Einengung, Angst vor Autonomieverlust und wahnhafte Täuschung.",
+                            "m_norm": [0.33, 0.34],
+                            "sd_norm": [0.40, 0.38],
+                            "score_path": "calculation.scores_calculation.all_results.paranoides_denken_z_score",
+                            "clinic_sample_var": "paranoides_denken_z_score",
+                            "items": 5
+                        }, {
+                            "left_title": "Psychotizismus",
+                            "left_text": "",
+                            "right_title": "",
+                            "right_text": "Gefühl der Isolation und zwischenmenschlichen Entfremdung. Verzerrter, isolierter Lebensstil bis zu Halluzination und Gedankenzerfall.",
+                            "m_norm": [0.19, 0.19],
+                            "sd_norm": [0.28, 0.27],
+                            "score_path": "calculation.scores_calculation.all_results.psychotizismus_z_score",
+                            "clinic_sample_var": "psychotizismus_z_score",
+                            "items": 5
+                        }, {
+                            "left_title": "GSI",
+                            "left_text": "Global Severity Index",
+                            "right_title": "GSI",
+                            "right_text": "Durchschnittliche Belastung in allen Bereichen",
+                            "m_norm": [0.28, 0.35],
+                            "sd_norm": [0.23, 0.23],
+                            "score_path": "calculation.scores_calculation.all_results.gsi_global_severity_index_z_score",
+                            "clinic_sample_var": "gsi_global_severity_index_z_score",
+                            "items": 53
+                        }],
+                        "ranges": [{
+                            "range_start": -999,
+                            "range_stop": 1,
+                            "text": "Gesunde Ausprägung",
+                            "color": "#2E7D32"
+                        }, {
+                            "range_start": 1,
+                            "range_stop": 2,
+                            "text": "Normale Ausprägung",
+                            "color": "#FFFFFF"
+                        }, {
+                            "range_start": 2,
+                            "range_stop": 999,
+                            "text": "Starke Ausprägung",
+                            "color": "#C62828"
+                        }]
+                    }
+                }
+            },
+            methods: {
+                get_zusatzitems: function (r) {
+
+                    var d = {
+                        "should_print_chart": false,
+                        "zusatzitems": {
+                            "defined": false,
+                            "array": []
+                        },
+                        "dopouts": {
+                            "defined": false,
+                            "array": []
+                        },
+                        "zusatzitems_full": {
+                            "defined": false,
+                            "array": []
+                        }
+                    };
+
+                    r.data.forEach(function (sr) {
+                        if ("zusatzitem" in sr.calculation.scores_calculation) {
+                            var zusatzitem = sr.calculation.scores_calculation.zusatzitem;
+                            zusatzitem.items.forEach(function (item) {
+                                var base_name = item.id + "__";
+                                zusatzitem[base_name + "name"] = item.name;
+                                zusatzitem[base_name + "result"] = item.result;
+                                zusatzitem[base_name + "field"] = item.field;
+                            }.bind(this));
+
+                            if (zusatzitem.dropout === true) {
+                                d.dopouts.array.push(zusatzitem);
+                            } else {
+                                d.zusatzitems.array.push(zusatzitem);
+                            };
+                            d.zusatzitems_full.array.push(zusatzitem);
+                        };
+                    }.bind(this));
+
+                    if (d.zusatzitems.array.length > 0) {
+                        d.zusatzitems.defined = true;
+                        d.should_print_chart = true;
+                    };
+
+                    if (d.dopouts.array.length > 0) {
+                        d.dopouts.defined = true;
+                    };
+
+                    if (d.zusatzitems_full.array.length > 0) {
+                        d.zusatzitems_full.defined = true;
+                    };
+
+                    var return_obj = Object.assign({}, r);
+                    return_obj.zusatz = d;
+
+                    return return_obj;
+                },
+                bscl_pdf_zusatzangaben: function (sr) {
+                    var pdf = [];
+                    try {
+
+                        var allResults = sr.zusatz.zusatzitems_full.array;
+
+                        // -----------------------------------------------
+                        // Sort Results
+                        // -----------------------------------------------
+
+                        function sortByKey(array, key) {
+                            return array.sort(function (a, b) {
+                                var x = a[key];
+                                var y = b[key];
+                                return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                            });
+                        }
+
+
+                        allResults = sortByKey(allResults, "mz_date");
+
+
+                        // -----------------------------------------------
+                        // Build pdfmake Table
+                        // -----------------------------------------------
+
+                        var table = {
+                            "headerRows": 1,
+                            "layout": "lightHorizontalLines",
+                            "margin": [0, 6, 0, 12],
+                            "table": {
+                                "widths": [95, "*", "*", "*", "*"],
+                                "body": []
+                            }
+                        };
+
+                        var talbe_header = [
+                            [{
+                                    "text": "Messzeitpunkt",
+                                    "style": "p",
+                                    "margin": [0, 0, 0, 0]
+                                },
+                                {
+                                    "text": "Datum",
+                                    "style": "chart_p",
+                                    "margin": [0, 0, 0, 6]
+                                },
+                            ],
+                            {
+                                "text": "Schlechter Appetit",
+                                "alignment": "center",
+                                "style": "p"
+                            },
+                            {
+                                "text": "Einschlaf-schwierigkeiten",
+                                "alignment": "center",
+                                "style": "p"
+                            },
+                            {
+                                "text": "Gedanken an Tod & Sterben",
+                                "alignment": "center",
+                                "style": "p"
+                            },
+                            {
+                                "text": "Schuldgefühle",
+                                "alignment": "center",
+                                "style": "p"
+                            }
+                        ];
+
+                        table.table.body.push(talbe_header);
+
+
+
+                        allResults.forEach(function (result, resultID) {
+
+                            if (result.dropout) {
+                                // Dropout
+                                var messung = [
+                                    [{
+                                            "text": result.mz_typ,
+                                            "style": "p",
+                                            "margin": [0, 6, 0, 0]
+                                        },
+                                        {
+                                            "text": result.mz_datum,
+                                            "style": "chart_p",
+                                            "margin": [0, 0, 0, 6]
+                                        },
+                                    ],
+                                    {
+                                        "colSpan": 4,
+                                        "margin": [0, 6, 0, 0],
+                                        "text": [{
+                                                "text": result.dropout_reason + "\n",
+                                                "style": "p"
+                                            },
+                                            {
+                                                "text": "Dropout (" + result.dropout_code + ")",
+                                                "style": "chart_p",
+                                                "color": "#F44336"
+                                            }
+                                        ]
+                                    }
+                                ];
+                            } else {
+                                // Daten vorhanden
+
+                                var text_0 = "k.A.";
+                                var text_1 = "k.A.";
+                                var text_2 = "k.A.";
+                                var text_3 = "k.A.";
+
+                                result.items.forEach(function (item, itemID) {
+                                    if (parseInt(item.id) === 0) {
+                                        text_0 = item.result;
+                                    };
+                                    if (parseInt(item.id) === 1) {
+                                        text_1 = item.result;
+                                    };
+                                    if (parseInt(item.id) === 2) {
+                                        text_2 = item.result;
+                                    };
+                                    if (parseInt(item.id) === 3) {
+                                        text_3 = item.result;
+                                    };
+                                }.bind(this));
+
+                                var messung = [
+                                    [{
+                                            "text": result.mz_typ,
+                                            "style": "p",
+                                            "margin": [0, 6, 0, 0]
+                                        },
+                                        {
+                                            "text": result.mz_datum,
+                                            "style": "chart_p",
+                                            "margin": [0, 0, 0, 6]
+                                        },
+                                    ],
+                                    {
+                                        "text": text_0,
+                                        "style": "p",
+                                        "alignment": "center",
+                                        "margin": [0, 10, 0, 0]
+                                    },
+                                    {
+                                        "text": text_1,
+                                        "style": "p",
+                                        "alignment": "center",
+                                        "margin": [0, 10, 0, 0]
+                                    },
+                                    {
+                                        "text": text_2,
+                                        "style": "p",
+                                        "alignment": "center",
+                                        "margin": [0, 10, 0, 0]
+                                    },
+                                    {
+                                        "text": text_3,
+                                        "style": "p",
+                                        "alignment": "center",
+                                        "margin": [0, 10, 0, 0]
+                                    }
+                                ];
+                            };
+
+
+                            table.table.body.push(messung);
+
+
+                        }.bind(this));
+
+
+
+                        var return_stack = {
+                            "id": "bscl_zusatzangaben",
+                            "stack": []
+                        };
+
+                        return_stack.stack.push(makepdf._heading("Zusatzangaben", null, 'h2'));
+                        return_stack.stack.push(table);
+
+                        return return_stack;
+
+                    } catch (e) {
+                        console.log('bscl_pdf_zusatzangaben', e)
+                    };
+
+                    return pdf;
+                },
+                bscl_pdf_content: function (s) {
+                    var pdf = [];
+                    try {
+                        if (s.data.length > 0) {
+
+                            var sr = this.get_zusatzitems(s);
+                            console.error('bscl_pdf_content', sr);
+
+                            if (sr.zusatz.should_print_chart === true) {
+                                var chart = [];
+                                chart.push(makepdf._horizontalLine(100, "#F5F5F5", 1));
+                                chart.push(makepdf._pdf_chart_profile("de", this.get_pdf_chart_options(this.bscl_chart.options), {}, {}, [], this.bscl_chart.scales, sr, this.bscl_chart.ranges));
+                                chart.push(makepdf._horizontalLine(100, "#F5F5F5"));
+                                pdf.push(makepdf._keepTogether(chart, "chart_" + this.name));
+                            };
+
+                            pdf.push(makepdf._keepTogether(this.bscl_pdf_zusatzangaben(sr), "zusatzangaben_" + this.name));
+
+                        } else {
+                            pdf.push(this.pdf_no_data(this.name));
+                        };
+
+                    } catch (e) {
+                        console.log('bscl_pdf_content', e)
+                        pdf.push(this.pdf_error(this.name));
+                    };
+
+                    return pdf;
+                }
+            }
+        });
+    }
+};
+Vue.use(plugin_bscl_anq);
 
 
 // Init Vue
